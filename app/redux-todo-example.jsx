@@ -11,10 +11,24 @@ var stateDefault = {
 var reducer = (state = stateDefault, action) => {
   // ES5 default def
   //state = state || {name: 'Anonymous'};
+  switch (action.type) {
+    case 'CHANGE_SEARCH_TEXT':
+      return {
+        ...state,
+        searchText: action.text
+      };
+    default:
+      return state;
+  }
   return state;
 };
 var store = redux.createStore( reducer );
 
 var currentState = store.getState();
 
-console.log( 'current state', currentState);
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  text: 'new search text'
+});
+
+console.log('new state', store.getState());
