@@ -22,7 +22,17 @@ var reducer = (state = stateDefault, action) => {
   }
   return state;
 };
-var store = redux.createStore( reducer );
+
+var store = redux.createStore( reducer, redux.compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+) );
+
+// subsribe to change
+var unsubscribe = store.subscribe( () =>{
+  var state = store.getState();
+  console.log('Search text is', state.searchText);
+  document.getElementById('app').innerHTML = state.name;
+});
 
 var currentState = store.getState();
 
@@ -31,4 +41,12 @@ store.dispatch({
   text: 'new search text'
 });
 
-console.log('new state', store.getState());
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  text: 'new search text two'
+});
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  text: 'last changes to text'
+});
